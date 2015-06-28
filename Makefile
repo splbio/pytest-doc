@@ -26,7 +26,7 @@ isort:
 	find pytest_django tests -name '*.py' -exec isort {} +
 
 clean:
-	rm -rf bin include/ lib/ man/ pytest_doc.egg-info/ build/
+	rm -rf include/ lib/ man/ pytest_doc.egg-info/ build/
 
 install:
 	rm -rf build
