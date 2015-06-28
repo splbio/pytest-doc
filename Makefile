@@ -44,3 +44,6 @@ pypi-upload:
 pypi-register:
 	/usr/bin/python setup.py register -r pypi
 
+publish-all:
+	/usr/bin/python setup.py build register  -r pypi sdist upload -r pypi
+
