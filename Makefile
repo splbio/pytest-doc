@@ -1,5 +1,7 @@
 .PHONY: docs test clean isort
 
+# port install py-certifi
+
 testenv: bin/py.test
 
 test: bin/py.test
@@ -29,3 +31,10 @@ clean:
 install:
 	rm -rf build
 	python setup.py build install
+
+pypitest-upload:
+	/usr/bin/python setup.py register -r pypitest
+
+pypi-upload:
+	/usr/bin/python setup.py register -r pypi
+

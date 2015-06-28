@@ -33,7 +33,7 @@ setup(
     long_description=read('README.rst'),
     install_requires=['pytest>=2.5'],
     classifiers=['Development Status :: 5 - Production/Stable',
-                 'Framework :: pytest',
+                 #'Framework :: pytest',
                  'Intended Audience :: Developers',
                  'License :: OSI Approved :: BSD License',
                  'Operating System :: OS Independent',
