@@ -33,8 +33,14 @@ install:
 	python setup.py build install
 
 pypitest-upload:
+	/usr/bin/python setup.py sdist upload -r pypitest
+
+pypitest-register:
 	/usr/bin/python setup.py register -r pypitest
 
 pypi-upload:
+	/usr/bin/python setup.py sdist upload -r pypi
+
+pypi-register:
 	/usr/bin/python setup.py register -r pypi
 
