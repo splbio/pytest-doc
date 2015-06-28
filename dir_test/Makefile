@@ -1,5 +1,8 @@
+
+OUTNAME=example
+
 all build-docs:
-	py.test --docs log.json
-	json2rst < log.json > log.rst
-	rst2html.py log.rst > log.html
+	py.test --docs $(OUTNAME).json
+	json2rst < $(OUTNAME).json > $(OUTNAME).rst
+	rst2html.py $(OUTNAME).rst > $(OUTNAME).html
 
