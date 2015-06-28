@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+
+import json
+import os, sys
+from operator import itemgetter
+
+def main():
+    obj = json.loads(sys.stdin.read())
+    toc = { "subcategories":{},
+            "tests":[]
+    }
+    for test in obj["tests"]:
+        #print json.dumps(test, indent=4)
+        tocp = toc
+        category = test.get("category", "unknown")
+        for subsect in category.split(":"):
+            if not subsect in tocp["subcategories"]:
+                tocp["subcategories"][subsect] = {
+                    "subcategories":{},
+                    "tests":[]
+                    }
+            tocp = tocp["subcategories"][subsect]
+        #print json.dumps(tocp, indent=4)
+        tocp["tests"].append(test)
+
+    sys.stderr.write(json.dumps(toc, indent=4) + "\n")
+
+    print """
+
+.. sectnum::
+
+.. contents::
+
+.. topic:: Tests
+
+    Hello world
+
+    """
+
+    known = []
+    unknown = []
+    for test in obj["tests"]:
+        if "category" in test:
+            known.append(test)
+        else:
+            unknown.append(test)
+
+    known = sorted(known, key=itemgetter('category'))
+    dumpcategories(known)
+    dumpcategories(unknown)
+
+def dumpcategories(lst):
+    lastcat = ""
+    for test in lst:
+        category = test.get("category", "unknown")
+        cnt = category.count(':')
+        if cnt == 0:
+            sep = "="
+        elif cnt == 1:
+            sep = "-"
+        elif cnt == 2:
+            sep = "~"
+        else:
+            raise Exception("category nested too deep: %s" % category)
+        if category != lastcat:
+            terminal = category.split(":")[-1]
+            print terminal
+            print sep * len(terminal)
+            print
+
+        print test["testname"]
+        print
+        if "bugs" in test:
+            print "Addresses the following bugs\n"
+            for bug in test["bugs"]:
+                tracker = bug.get("tracker", "")
+                link = ""
+                if tracker == "redmine":
+                    url = os.getenv("REDMINE_URL")
+                    if url:
+                        link = "%s/%d" % (url, bug["id"])
+                line = "#. %s" % bug["id"]
+                if link:
+                    line = line + " " + link
+                print line
+                print
+            print
+        print test.get("docstr", "not documented")
+        print
+
+
+if __name__ == "__main__":
+    main()
